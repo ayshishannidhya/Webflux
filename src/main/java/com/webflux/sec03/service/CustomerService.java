@@ -16,6 +16,8 @@ import com.webflux.sec03.dto.CustomerDto;
 import com.webflux.sec03.mapper.EntityDtoMapper;
 import com.webflux.sec03.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -28,6 +30,11 @@ public class CustomerService {
 
     public Flux<CustomerDto> getAllCustomers() {
         return customerRepository.findAll()
+                .map(c -> EntityDtoMapper.toDto(c));
+    }
+
+    public Flux<CustomerDto> getAllCustomers(Integer page, Integer size) {
+        return customerRepository.findBy(PageRequest.of(page - 1, size))//first page expected to be 0
                 .map(c -> EntityDtoMapper.toDto(c));
     }
 
@@ -51,7 +58,11 @@ public class CustomerService {
                 .map(c -> EntityDtoMapper.toDto(c));
     }
 
-    public Mono<Void> deleteCustomerById(Integer id) {
-        return customerRepository.deleteById(id);
+    public Mono<ResponseEntity<Boolean>> deleteCustomerById(Integer id) {
+        return customerRepository.deleteCustomerById(id)
+//                .filter(aBoolean -> aBoolean == false)// it pass if the customer is empty and
+                .filter(aBoolean -> aBoolean)//it will filter out false and keep true, so when false is out it will empty and it will skip .map() and goes to .defaultIfEmpty()
+                .map(b -> ResponseEntity.ok(b))
+                .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 }
