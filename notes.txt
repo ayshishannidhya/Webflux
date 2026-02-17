@@ -1,0 +1,16 @@
+DTO class(com.webflux.sec03.dto.CustomerDTO)
+It represents the API / data we share with clients
+
+Entity Class(com.webflux.sec03.entity.Customer)
+It represents the data stored in the DB Table
+
+
+Do we need DTO (Data Transfer Object) ?
+--Advantages
+    1.Decoupling
+        - DB Table vs API
+    2.Security
+        - Data exposure
+        - Customer entity might have password field. Customer Dto might not have.
+    3.Versioning
+    4.Validation

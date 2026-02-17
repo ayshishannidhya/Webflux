@@ -4,8 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 
-@SpringBootApplication
-@EnableR2dbcRepositories
+@SpringBootApplication(scanBasePackages = "com.webflux.${sec}")
+@EnableR2dbcRepositories(basePackages = "com.webflux.${sec}")
 public class WebfluxApplication {
 
     public static void main(String[] args) {
