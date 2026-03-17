@@ -1,4 +1,4 @@
-package com.webflux;
+package com.webflux.sec02;
 
 /*
  * Copyright (c) 2026 Ayshi Shannidhya Panda. All rights reserved.

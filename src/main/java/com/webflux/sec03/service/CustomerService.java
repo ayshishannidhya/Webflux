@@ -17,7 +17,6 @@ import com.webflux.sec03.mapper.EntityDtoMapper;
 import com.webflux.sec03.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -58,11 +57,19 @@ public class CustomerService {
                 .map(c -> EntityDtoMapper.toDto(c));
     }
 
-    public Mono<ResponseEntity<Boolean>> deleteCustomerById(Integer id) {
-        return customerRepository.deleteCustomerById(id)
-//                .filter(aBoolean -> aBoolean == false)// it pass if the customer is empty and
-                .filter(aBoolean -> aBoolean)//it will filter out false and keep true, so when false is out it will empty and it will skip .map() and goes to .defaultIfEmpty()
-                .map(b -> ResponseEntity.ok(b))
-                .defaultIfEmpty(ResponseEntity.notFound().build());
+//    public Mono<ResponseEntity<Boolean>> deleteCustomerById(Integer id) {
+//        return customerRepository.deleteCustomerById(id)
+
+    /// /                .filter(aBoolean -> aBoolean == false)// it pass if the customer is empty and
+//                .filter(aBoolean -> aBoolean)//it will filter out false and keep true, so when false is out it will empty and it will skip .map() and goes to .defaultIfEmpty()
+//                .map(b -> ResponseEntity.ok(b))
+//                .defaultIfEmpty(ResponseEntity.notFound().build());
+//    }
+    public Mono<Boolean> deleteCustomerById(Integer id) {
+        return customerRepository.findById(id)
+                .flatMap(entity ->
+                        customerRepository.deleteById(id).thenReturn(true)
+                )
+                .defaultIfEmpty(false);
     }
 }

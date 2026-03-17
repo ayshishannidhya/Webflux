@@ -1,4 +1,4 @@
-package com.webflux;
+package com.webflux.sec02;
 
 /*
  * Copyright (c) 2026 Ayshi Shannidhya Panda. All rights reserved.
@@ -11,7 +11,7 @@ package com.webflux;
  * Author: Ayshi Shannidhya Panda
  * Created on: 05-02-2026
  */
-
+    
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest(properties = {

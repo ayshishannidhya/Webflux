@@ -1,4 +1,4 @@
-package com.webflux;
+package com.webflux.sec02;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
