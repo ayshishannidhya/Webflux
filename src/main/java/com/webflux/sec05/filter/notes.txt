@@ -1,0 +1,9 @@
+The issue occurs because both classes are registered as `WebFilter` beans,
+and since no explicit order is defined, Spring arranges them based on its default
+ bean registration sequence—where `WebFilterDemo01` happens to come before `WebFilterDemo02`.
+ When a request arrives, the first filter (`WebFilterDemo01`) executes and logs `"received-1"`,
+ but it returns `Mono.empty()`, which **terminates the reactive chain immediately**
+ instead of passing control forward. As a result, the second filter is never invoked.
+ In WebFlux, each filter must explicitly call `chain.filter(exchange)` to continue execution;
+otherwise, the pipeline stops at that point. The correct fix is to return `chain.filter(exchange)`
+in each filter and optionally define execution order using `@Order` to make the flow deterministic.
